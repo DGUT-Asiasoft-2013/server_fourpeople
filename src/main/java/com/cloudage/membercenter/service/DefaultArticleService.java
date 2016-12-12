@@ -28,4 +28,9 @@ public class DefaultArticleService implements IArticleService{
 		return articleRepo.findAllByAuthorId(userId);
 	}
 
+	@Override
+	public Article save(Article article) {
+		return articleRepo.save(article);
+	}
+
 }
