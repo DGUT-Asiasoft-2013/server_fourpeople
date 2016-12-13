@@ -8,6 +8,7 @@ import com.cloudage.membercenter.entity.Article;
 import com.cloudage.membercenter.entity.User;
 
 public interface IArticleService {
+	Article findOne(int id);
 	List<Article> findAllByAuthor(User user);
 	List<Article> findAllByAuthorId(Integer userId);
 	Article save(Article article);
