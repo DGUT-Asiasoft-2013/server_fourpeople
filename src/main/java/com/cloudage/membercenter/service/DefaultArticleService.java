@@ -3,6 +3,11 @@ package com.cloudage.membercenter.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,4 +38,10 @@ public class DefaultArticleService implements IArticleService{
 		return articleRepo.save(article);
 	}
 
+	@Override
+	public Page<Article> getFeeds(int page) {
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		PageRequest pageRequest = new PageRequest(page, 50, sort);
+		return articleRepo.findAll(pageRequest);
+	}
 }

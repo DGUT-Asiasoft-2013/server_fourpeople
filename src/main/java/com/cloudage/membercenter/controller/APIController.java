@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -119,5 +120,15 @@ public class APIController {
 		article.setTitle(title);
 		article.setText(text);
 		return articleService.save(article);
+	}
+	
+	@RequestMapping("/feeds/{page}")
+	public Page<Article> getFeeds(@PathVariable int page){
+		return articleService.getFeeds(page);
+	}
+	
+	@RequestMapping("/feeds")
+	public Page<Article> getFeeds(){
+		return getFeeds(0);
 	}
 }

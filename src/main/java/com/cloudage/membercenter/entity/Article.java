@@ -13,6 +13,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 
+import org.springframework.context.annotation.Lazy;
+
 import com.cloudage.membercenter.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,6 +38,16 @@ public class Article extends BaseEntity {
 		this.author = author;
 	}
 
+	@Transient
+	public String getAuthorName(){
+		return author.name;
+	}
+	
+	@Transient
+	public String getAuthorAvatar(){
+		return author.avatar;
+	}
+	
 	@Column(updatable=false)
 	public Date getCreateDate() {
 		return createDate;
