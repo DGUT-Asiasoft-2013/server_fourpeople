@@ -21,9 +21,25 @@ public class RootController {
 	IAdminService adminService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String index(ModelMap model){
-		model.addAttribute("message","Member Center Index");
-		return "index";
+	public String index(ModelMap model,HttpServletRequest request){
+		return "redirect:/staff";
+	}
+	
+	@RequestMapping("/staff")
+	public String staff(ModelMap model){
+		return "staff";
+	}
+	
+	
+	
+	@RequestMapping("/users")
+	public String users(ModelMap model){
+		return "users";
+	}
+	
+	@RequestMapping("/feeds")
+	public String feeds(){
+		return "feeds";
 	}
 	
 	@RequestMapping("/test")

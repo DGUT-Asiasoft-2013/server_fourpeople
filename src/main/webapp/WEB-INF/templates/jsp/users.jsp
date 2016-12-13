@@ -1,6 +1,7 @@
 <%@ page language="java"%>
 
 <%@ include file="common/head.jsp"%>
+
 <html>
 <head>
 <title>Member Center - Staff</title>
@@ -26,9 +27,9 @@
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Staff</a></li>
-					<li><a href="#about">Members</a></li>
-					<li><a href="#contact">Settings</a></li>
+					<li><a href="staff">Staff</a></li>
+					<li class="active"><a href="#">Users</a></li>
+					<li><a href="feeds">Feeds</a></li>
 				</ul>
 			</div>
 		</div>
@@ -37,11 +38,8 @@
 	<div class="container">
 		<br/>
 		<div class="jumbotron">
-			<h1>Hello, world!</h1>
-			<p>Here is the admin dashboard.</p>
-			<p>
-				<a class="btn btn-primary btn-lg" href="api/hello" role="button">API Hello</a>
-			</p>
+			<h1>Users controling page.</h1>
+			<p>Here are all the registered users.</p>
 		</div>
 	</div>
 	<script src="resources/jquery/jquery-3.1.1.min.js"></script>
