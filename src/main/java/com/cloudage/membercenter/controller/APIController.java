@@ -24,6 +24,7 @@ import com.cloudage.membercenter.entity.Comment;
 import com.cloudage.membercenter.entity.User;
 import com.cloudage.membercenter.service.IArticleService;
 import com.cloudage.membercenter.service.ICommentService;
+import com.cloudage.membercenter.service.ILikesService;
 import com.cloudage.membercenter.service.IUserService;
 
 @RestController
@@ -32,13 +33,16 @@ public class APIController {
 
 	@Autowired
 	IUserService userService;
-	
+
 	@Autowired
 	IArticleService articleService;
-	
+
 	@Autowired
 	ICommentService commentService;
-	
+
+	@Autowired
+	ILikesService likesService;
+
 	@RequestMapping(value = "/hello", method=RequestMethod.GET)
 	public @ResponseBody String hello(){
 		return "HELLO WORLD";
@@ -52,13 +56,13 @@ public class APIController {
 			@RequestParam String name,
 			MultipartFile avatar,
 			HttpServletRequest request){
-		
+
 		User user = new User();
 		user.setAccount(account);
 		user.setPasswordHash(passwordHash);
 		user.setEmail(email);
 		user.setName(name);
-		
+
 		if(avatar!=null){
 			try{
 				String realPath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload");
@@ -68,16 +72,16 @@ public class APIController {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return userService.save(user);
 	}
-	
+
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public User login(
 			@RequestParam String account,
 			@RequestParam String passwordHash,
 			HttpServletRequest request){
-		
+
 		User user = userService.findByAccount(account);
 		if(user!=null && user.getPasswordHash().equals(passwordHash)){
 			HttpSession session = request.getSession(true);
@@ -87,14 +91,14 @@ public class APIController {
 			return null;
 		}
 	}
-	
+
 	@RequestMapping(value="/me", method=RequestMethod.GET)
 	public User getCurrentUser(HttpServletRequest request){
 		HttpSession session = request.getSession(true);
 		Integer uid = (Integer) session.getAttribute("uid");
 		return userService.findById(uid);
 	}
-	
+
 	@RequestMapping(value="/passwordrecover", method=RequestMethod.POST)
 	public boolean resetPassword(
 			@RequestParam String email,
@@ -109,12 +113,12 @@ public class APIController {
 			return true;
 		}
 	}
-	
+
 	@RequestMapping(value="/articles/{userId}")
 	public List<Article> getArticlesByUserID(@PathVariable Integer userId){
 		return articleService.findAllByAuthorId(userId);
 	}
-	
+
 	@RequestMapping(value="/article",method=RequestMethod.POST)
 	public Article addArticle(
 			@RequestParam String title,
@@ -127,35 +131,35 @@ public class APIController {
 		article.setText(text);
 		return articleService.save(article);
 	}
-	
+
 	@RequestMapping("/feeds/{page}")
 	public Page<Article> getFeeds(@PathVariable int page){
 		return articleService.getFeeds(page);
 	}
-	
+
 	@RequestMapping("/feeds")
 	public Page<Article> getFeeds(){
 		return getFeeds(0);
 	}
-	
+
 	@RequestMapping("/article/{article_id}/comments/{page}")
 	public Page<Comment> getCommentsOfArticle(
 			@PathVariable int article_id,
 			@PathVariable int page){
 		return commentService.findCommentsOfArticle(article_id, page);
 	}
-	
+
 	@RequestMapping("/article/{article_id}/comments/count")
 	public int getCommentsCountOfArticle(@PathVariable int article_id){
 		return commentService.getCommentCountOfArticle(article_id);
 	}
-	
+
 	@RequestMapping("/article/{article_id}/comments")
 	public Page<Comment> getCommentsOfArticle(
 			@PathVariable int article_id){
 		return commentService.findCommentsOfArticle(article_id, 0);
 	}
-	
+
 	@RequestMapping(value = "/article/{article_id}/comments", method = RequestMethod.POST)
 	public Comment postComment(
 			@PathVariable int article_id,
@@ -168,5 +172,27 @@ public class APIController {
 		comment.setArticle(article);
 		comment.setText(text);
 		return commentService.save(comment);
+	}
+
+	@RequestMapping("/article/{article_id}/likes")
+	public int countLikes(@PathVariable int article_id){
+		return likesService.countLikes(article_id);
+	}
+
+	@RequestMapping(value="/article/{article_id}/likes",method = RequestMethod.POST)
+	public int changeLikes(
+			@PathVariable int article_id,
+			@RequestParam boolean likes,
+			HttpServletRequest request
+			){
+		User me = getCurrentUser(request);
+		Article article = articleService.findOne(article_id);
+
+		if(likes)
+			likesService.addLike(me, article);
+		else
+			likesService.removeLike(me, article);
+		
+		return likesService.countLikes(article_id);
 	}
 }
