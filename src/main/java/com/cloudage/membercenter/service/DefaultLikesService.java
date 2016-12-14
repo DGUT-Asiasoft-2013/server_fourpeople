@@ -44,4 +44,9 @@ public class DefaultLikesService implements ILikesService {
 		return likesRepo.likeCountsOfArticle(articleId);
 	}
 
+	@Override
+	public boolean checkLiked(int userId, int articleId) {
+		return likesRepo.checkLikesExsists(userId, articleId);
+	}
+
 }

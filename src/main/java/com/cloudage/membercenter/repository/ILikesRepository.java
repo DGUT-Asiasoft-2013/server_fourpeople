@@ -12,4 +12,6 @@ public interface ILikesRepository extends PagingAndSortingRepository<Likes, Like
 	@Query("select count(*) from Likes likes where likes.id.article.id = :articleId")
 	int likeCountsOfArticle(int articleId);
 
+	@Query("select count(*) from Likes likes where likes.id.user.id = :authorId and likes.id.article.id = :articleId")
+	boolean checkLikesExsists(int authorId, int articleId);
 }

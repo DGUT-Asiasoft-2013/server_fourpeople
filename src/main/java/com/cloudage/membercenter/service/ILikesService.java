@@ -8,5 +8,6 @@ public interface ILikesService {
 	void addLike(User user, Article article);
 	void removeLike(User user, Article article);
 	int countLikes(int articleId);
+	boolean checkLiked(int userId, int articleId);
 
 }
