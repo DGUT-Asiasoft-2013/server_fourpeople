@@ -5,6 +5,7 @@ import javax.persistence.ManyToOne;
 
 import com.cloudage.membercenter.util.BaseEntity;
 import com.cloudage.membercenter.util.DateRecord;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -23,6 +24,7 @@ public class Comment extends DateRecord{
 	}
 	
 	@ManyToOne(optional=false)
+	@JsonIgnore
 	public Article getArticle() {
 		return article;
 	}
