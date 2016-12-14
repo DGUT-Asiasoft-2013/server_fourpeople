@@ -30,4 +30,9 @@ public class DefaultCommentService implements ICommentService {
 	public Comment save(Comment comment) {
 		return commentRepo.save(comment);
 	}
+
+	@Override
+	public int getCommentCountOfArticle(int articleId) {
+		return commentRepo.commentCountOfArticle(articleId);
+	}
 }

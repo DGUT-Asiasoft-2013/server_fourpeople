@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.runners.Parameterized.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -142,6 +143,11 @@ public class APIController {
 			@PathVariable int article_id,
 			@PathVariable int page){
 		return commentService.findCommentsOfArticle(article_id, page);
+	}
+	
+	@RequestMapping("/article/{article_id}/comments/count")
+	public int getCommentsCountOfArticle(@PathVariable int article_id){
+		return commentService.getCommentCountOfArticle(article_id);
 	}
 	
 	@RequestMapping("/article/{article_id}/comments")
