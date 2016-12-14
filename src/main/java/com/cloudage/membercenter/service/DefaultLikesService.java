@@ -46,7 +46,7 @@ public class DefaultLikesService implements ILikesService {
 
 	@Override
 	public boolean checkLiked(int userId, int articleId) {
-		return likesRepo.checkLikesExsists(userId, articleId);
+		return likesRepo.checkLikesExsists(userId, articleId)>0;
 	}
 
 }
