@@ -174,7 +174,7 @@ public class APIController {
 		return commentService.save(comment);
 	}
 
-	@RequestMapping("/article/{article_id}/likes")
+	@RequestMapping(value="/article/{article_id}/likes",method=RequestMethod.GET)
 	public int countLikes(@PathVariable int article_id){
 		return likesService.countLikes(article_id);
 	}
