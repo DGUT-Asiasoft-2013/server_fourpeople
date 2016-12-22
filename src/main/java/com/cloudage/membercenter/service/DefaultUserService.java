@@ -24,8 +24,8 @@ public class DefaultUserService implements IUserService {
 	}
 
 	@Override
-	public User findByAccount(String account) {
-		return userRepo.findUserByAccount(account);
+	public User findByStudentId(String studentId) {
+		return userRepo.findUserByStudentId(studentId);
 	}
 
 	@Override
