@@ -3,6 +3,7 @@ package com.cloudage.membercenter.controller;
 import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
@@ -22,23 +23,24 @@ import com.cloudage.membercenter.service.IUserService;
 public class APIController {
 	@Autowired
 	IUserService iUserService;
-	
+
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
-	public @ResponseBody String hello() {
-		return "濂戒箙涓嶈锛屼綘杩樺ソ鍚楋紵";
+	public @ResponseBody String hello(HttpServletResponse httpServletResponse) {
+		httpServletResponse.setContentType("text/html;charset=UTF-8");
+		return "好久不见，你还好吗？";
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public User register(
-			@RequestParam String studentId,
-			@RequestParam String name, 
+	public User register(@RequestParam String studentId, 
+			@RequestParam String name,
 			@RequestParam String passwordHash,
-			@RequestParam String sex,
+			@RequestParam String sex, 
 			@RequestParam String email, 
 			@RequestParam String address,
 			@RequestParam String tel,
 			@RequestParam String balance,
-			MultipartFile avatar, HttpServletRequest request) {
+			MultipartFile avatar,
+			HttpServletRequest request) {
 		User user = new User();
 		user.setStudentId(studentId);
 		user.setName(name);
@@ -60,9 +62,10 @@ public class APIController {
 		return iUserService.save(user);
 
 	}
+
 	@RequestMapping(value = "/passwordrecover", method = RequestMethod.POST)
 	public Boolean passwordrecover(
-			@RequestParam String email,
+			@RequestParam String email, 
 			@RequestParam String passwordHash) {
 		User user = iUserService.findByEmail(email);
 		if (user != null) {
@@ -74,6 +77,7 @@ public class APIController {
 		}
 
 	}
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public User login(
 			@RequestParam String studentId,
