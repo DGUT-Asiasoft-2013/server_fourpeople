@@ -9,7 +9,7 @@ import com.cloudage.membercenter.entity.User;
 public interface IResumeService {
 	Resume save(Resume resume);
 	List<Resume>findAllByAuthor(User user);
-	List<Resume>findAllByAuthorAccount(String account);
+	List<Resume>findAllByAuthorAccount(String studentId);
 	Resume findOne(String job_account);
 	Page<Resume>getResume(int page);
 

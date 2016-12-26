@@ -31,7 +31,8 @@ public class APIController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public User register(@RequestParam String studentId, 
+	public User register(
+			@RequestParam String studentId, 
 			@RequestParam String name,
 			@RequestParam String passwordHash,
 			@RequestParam String sex, 

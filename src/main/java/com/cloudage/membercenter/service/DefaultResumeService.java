@@ -34,9 +34,9 @@ public class DefaultResumeService implements IResumeService{
 	}
 
 	@Override
-	public List<Resume> findAllByAuthorAccount(String account) {
+	public List<Resume> findAllByAuthorAccount(String studentId) {
 
-		return resumeRepo.findAllByAuthorAccount(account);
+		return resumeRepo.findAllByAuthorAccount(studentId);
 	}
 
 	@Override
