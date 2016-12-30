@@ -93,4 +93,44 @@ public class APIController {
 			return null;
 		}
 	}
+	
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
+	private User getCurrentUser(HttpServletRequest httpServletRequest) {
+		HttpSession httpSession = httpServletRequest.getSession(true);
+		Integer id = (Integer) httpSession.getAttribute("id");
+		return iUserService.findById(id);
+	}
+	
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public User modify(
+			@RequestParam String name, 
+			@RequestParam String sex,
+			@RequestParam String address,
+			@RequestParam String tel,
+			MultipartFile avatar, HttpServletRequest request) {
+		User user = getCurrentUser(request);
+		user.setName(name);
+		user.setSex(sex);
+		user.setAddress(address);
+		user.setTel(tel);
+		if (avatar != null) {
+			try {
+				String realPath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+				FileUtils.copyInputStreamToFile(avatar.getInputStream(), new File(realPath, user.getStudentId() + ".png"));
+				user.setAvatar("upload/" + user.getStudentId() + ".png");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return iUserService.save(user);
+	}
+	
+	@RequestMapping(value = "/charge", method = RequestMethod.POST)
+	public User charge(
+			@RequestParam String balance, HttpServletRequest request) {
+		User user = getCurrentUser(request);
+		user.setBalance( String.valueOf( Double.parseDouble(user.getBalance()) + Double.parseDouble(balance) ) );
+
+		return iUserService.save(user);
+	}
 }
