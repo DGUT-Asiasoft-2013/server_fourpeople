@@ -6,8 +6,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.cloudage.membercenter.entity.Auction;
+import com.cloudage.membercenter.entity.User;
 
 public interface IAuctionRepository extends PagingAndSortingRepository<Auction, Integer> {
 	
+	@Query("from Auction auction where auction.isAuctioning = 1")
+	Page<Auction> findAllVaildAuction(Pageable page);
+	
+	@Query("from Auction auction where auction.id = ?1")
+	Auction findAuction(int id);
+	
+	@Query("from Auction auction where auction.auctinner.id = ?1")
+	Page<Auction> findMyAuctionById(int auctionnerId,Pageable page);
+
 
 }

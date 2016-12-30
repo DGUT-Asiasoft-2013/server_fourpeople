@@ -29,6 +29,7 @@
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<mvc:resources mapping="/upload/**" location="/WEB-INF/upload/" />
+	<mvc:resources mapping="/auctionPicture/**" location="/WEB-INF/auctionPicture/" />
 
 	<mvc:annotation-driven />
 
