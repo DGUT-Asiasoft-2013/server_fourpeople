@@ -22,9 +22,24 @@ public class Auction extends BaseEntity {
 	String price;
 	String method;
 	String others;
-	
+	String days;
+	Boolean isAuctioning;
 
-	
+	public String getDays() {
+		return days;
+	}
+
+	public void setDays(String days) {
+		this.days = days;
+	}
+
+	public Boolean getIsAuctioning() {
+		return isAuctioning;
+	}
+
+	public void setIsAuctioning(Boolean isAuctioning) {
+		this.isAuctioning = isAuctioning;
+	}
 
 	public String getOthers() {
 		return others;
@@ -41,7 +56,6 @@ public class Auction extends BaseEntity {
 	public void setMethod(String method) {
 		this.method = method;
 	}
-
 
 	public String getPrice() {
 		return price;
@@ -110,6 +124,7 @@ public class Auction extends BaseEntity {
 	void onPrePersist() {
 		createDate = new Date();
 		editDate = new Date();
+		isAuctioning=true;
 	}
 
 }

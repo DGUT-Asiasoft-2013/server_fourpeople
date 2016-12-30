@@ -22,12 +22,6 @@ public class User extends BaseEntity {
 	String avatar;
 	String balance;  //余额
 	
-//	List<Resume> resumes;
-//	@OneToMany
-//	public List<Resume> resumes(){
-//		return resumes;
-//	}
-	
 	@Column(nullable = false)
 	public String getBalance() {
 		return balance;

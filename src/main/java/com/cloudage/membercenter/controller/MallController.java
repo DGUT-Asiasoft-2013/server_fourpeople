@@ -48,6 +48,7 @@ public class MallController {
 	public Mall open(
 			@RequestParam String shopName,   
 			@RequestParam String shopType,
+			@RequestParam String shopAbout,
 			MultipartFile shopAvatar,
 			HttpServletRequest httpServletRequest){
 		User currentUser = getCurrentUser(httpServletRequest);
@@ -55,6 +56,8 @@ public class MallController {
 		mall.setShopName(shopName);
 		mall.setShopType(shopType);
 		mall.setUser(currentUser);
+		mall.setShopAbout(shopAbout);
+		mall.setShopLiked(0);
 		if (shopAvatar!= null) {
 			try {
 				String realPath = httpServletRequest.getSession().getServletContext().getRealPath("/WEB-INF/shopUpload");
@@ -86,13 +89,14 @@ public class MallController {
 			MultipartFile goodsAvatar,
 			HttpServletRequest httpServletRequest){
 		User currentUser = getCurrentUser(httpServletRequest);
-	    Mall mall=iMallService.getMall(currentUser.getId());
+	    Mall mall=iMallService.findMallByUserId(currentUser.getId());
 	    Goods goods=new Goods();
 	    goods.setGoodsName(goodsName);
 	    goods.setGoodsPiece(goodsPiece);
 	    goods.setGoodsNumber(goodsNumber);
 	    goods.setGoodsAbout(goodsAbout);
 	    goods.setMall(mall);
+	    goods.setGoodsLiked(0);
 		if (goodsAvatar!= null) {
 			try {
 				String realPath = httpServletRequest.getSession().getServletContext().getRealPath("/WEB-INF/goodsUpload");
@@ -119,4 +123,65 @@ public class MallController {
 		return getGoods(httpServletRequest,0);
 	}
 	
+	@RequestMapping(value = "/goods/delete", method = RequestMethod.POST)
+	public Boolean delete(
+			@RequestParam String id){
+		Integer goodsId=Integer.valueOf(id);
+		if(iGoodsService.delete(goodsId)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@RequestMapping(value = "/goods/dispose", method = RequestMethod.POST)
+	public Goods dispose(
+			@RequestParam String id, 
+			@RequestParam String goodsName, 
+			@RequestParam String goodsPiece,
+			@RequestParam String goodsNumber, 
+			@RequestParam String goodsAbout) {
+		Integer goodsId = Integer.valueOf(id);
+		Goods goods = iGoodsService.findGoodsById(goodsId);
+		goods.setGoodsName(goodsName);
+		goods.setGoodsPiece(goodsPiece);
+		goods.setGoodsNumber(goodsNumber);
+		goods.setGoodsAbout(goodsAbout);
+		return iGoodsService.save(goods);
+	}
+	
+	@RequestMapping("/shop/shopcenter")
+	public Mall getMall(
+			HttpServletRequest httpServletRequest){
+		User currentUser=getCurrentUser(httpServletRequest);
+		Integer id=currentUser.getId();
+		return iMallService.findMallByUserId(id);
+	}
+	
+	@RequestMapping("/shop/show/{page}")
+	public Page<Mall> getMall(
+			@PathVariable int page) {
+		return iMallService.getMall(page);
+	}
+
+	@RequestMapping("/shop/show")
+	public Page<Mall> getMall() {
+		return getMall(0);
+	}
+	
+	@RequestMapping(value = "/shop/goods/show/{page}", method = RequestMethod.POST)
+	public Page<Goods> getGoodsByMall(
+			@RequestParam String id,
+			@PathVariable int page) {
+		Integer mallId=Integer.valueOf(id);
+		return iGoodsService.getGoodsByMall(mallId, page);
+	}
+
+	@RequestMapping(value = "/shop/goods/show", method = RequestMethod.POST)
+	public Page<Goods> getGoodsByMall(
+			@RequestParam String id) {
+		return getGoodsByMall(id, 0);
+	}
+	
 }
+	
