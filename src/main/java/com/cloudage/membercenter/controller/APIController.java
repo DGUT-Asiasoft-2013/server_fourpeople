@@ -3,6 +3,7 @@ package com.cloudage.membercenter.controller;
 import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
@@ -24,7 +25,8 @@ public class APIController {
 	IUserService iUserService;
 	
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
-	public @ResponseBody String hello() {
+	public @ResponseBody String hello(HttpServletResponse response) {
+		response.setContentType("text/html;charset=UTF-8");
 		return "好久不见，你还好吗？";
 	}
 
