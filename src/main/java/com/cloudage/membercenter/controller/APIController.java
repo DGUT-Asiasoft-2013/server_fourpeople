@@ -23,8 +23,9 @@ import com.cloudage.membercenter.service.IUserService;
 public class APIController {
 	@Autowired
 	IUserService iUserService;
-	
+
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
+
 	public @ResponseBody String hello(HttpServletResponse response) {
 		response.setContentType("text/html;charset=UTF-8");
 		return "好久不见，你还好吗？";
@@ -32,15 +33,16 @@ public class APIController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public User register(
-			@RequestParam String studentId,
-			@RequestParam String name, 
+			@RequestParam String studentId, 
+			@RequestParam String name,
 			@RequestParam String passwordHash,
-			@RequestParam String sex,
+			@RequestParam String sex, 
 			@RequestParam String email, 
 			@RequestParam String address,
 			@RequestParam String tel,
 			@RequestParam String balance,
-			MultipartFile avatar, HttpServletRequest request) {
+			MultipartFile avatar,
+			HttpServletRequest request) {
 		User user = new User();
 		user.setStudentId(studentId);
 		user.setName(name);
@@ -62,9 +64,10 @@ public class APIController {
 		return iUserService.save(user);
 
 	}
+
 	@RequestMapping(value = "/passwordrecover", method = RequestMethod.POST)
 	public Boolean passwordrecover(
-			@RequestParam String email,
+			@RequestParam String email, 
 			@RequestParam String passwordHash) {
 		User user = iUserService.findByEmail(email);
 		if (user != null) {
@@ -76,6 +79,7 @@ public class APIController {
 		}
 
 	}
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public User login(
 			@RequestParam String studentId,
@@ -89,5 +93,45 @@ public class APIController {
 		} else {
 			return null;
 		}
+	}
+	
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
+	private User getCurrentUser(HttpServletRequest httpServletRequest) {
+		HttpSession httpSession = httpServletRequest.getSession(true);
+		Integer id = (Integer) httpSession.getAttribute("id");
+		return iUserService.findById(id);
+	}
+	
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public User modify(
+			@RequestParam String name, 
+			@RequestParam String sex,
+			@RequestParam String address,
+			@RequestParam String tel,
+			MultipartFile avatar, HttpServletRequest request) {
+		User user = getCurrentUser(request);
+		user.setName(name);
+		user.setSex(sex);
+		user.setAddress(address);
+		user.setTel(tel);
+		if (avatar != null) {
+			try {
+				String realPath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+				FileUtils.copyInputStreamToFile(avatar.getInputStream(), new File(realPath, user.getStudentId() + ".png"));
+				user.setAvatar("upload/" + user.getStudentId() + ".png");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return iUserService.save(user);
+	}
+	
+	@RequestMapping(value = "/charge", method = RequestMethod.POST)
+	public User charge(
+			@RequestParam String balance, HttpServletRequest request) {
+		User user = getCurrentUser(request);
+		user.setBalance( String.valueOf( Double.parseDouble(user.getBalance()) + Double.parseDouble(balance) ) );
+
+		return iUserService.save(user);
 	}
 }

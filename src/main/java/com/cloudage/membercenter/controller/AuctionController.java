@@ -81,7 +81,7 @@ public class AuctionController {
 	@RequestMapping(value = "/auctions")
 	public Page<Auction> getAuctions() {
 		autoCheck();
-		return iAuctionsService.getAllAuctions(0);
+		return iAuctionsService.getAuctions(0);
 	}
 
 	@RequestMapping(value = "/auction/check")

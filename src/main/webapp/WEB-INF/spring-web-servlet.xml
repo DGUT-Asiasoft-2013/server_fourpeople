@@ -31,6 +31,12 @@
 	<mvc:resources mapping="/upload/**" location="/WEB-INF/upload/" />
 	<mvc:resources mapping="/auctionPicture/**" location="/WEB-INF/auctionPicture/" />
 
+
+	<mvc:resources mapping="/goodsUpload/**" location="/WEB-INF/goodsUpload/" />
+	<mvc:resources mapping="/shopUpload/**" location="/WEB-INF/shopUpload/" />
+	
+	<mvc:resources mapping="/ResumePicture/**" location="/WEB-INF/ResumePicture/"/>
+	
 	<mvc:annotation-driven />
 
 </beans>
