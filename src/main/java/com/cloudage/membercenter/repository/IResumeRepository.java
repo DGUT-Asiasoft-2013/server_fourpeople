@@ -9,7 +9,7 @@ import com.cloudage.membercenter.entity.Resume;
 import com.cloudage.membercenter.entity.User;
 
 @Repository
-public interface IResumeRepository extends PagingAndSortingRepository<Resume,String>{
+public interface IResumeRepository extends PagingAndSortingRepository<Resume,Integer>{
 	@Query("From User u where u=?1")
 	List<Resume>findAllByAuthor(User user);
 	@Query("From User u where u.studentId=?1")

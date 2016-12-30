@@ -48,10 +48,17 @@ public class DefaultResumeService implements IResumeService{
 	
 	}
 
+	
+
 	@Override
-	public Resume findOne(String resume_account) {
-		// 	return jobsRepo.findOne(job_account);
-		return resumeRepo.findOne(resume_account);
+	public Resume findOne(int id) {
+		// TODO Auto-generated method stub
+		return resumeRepo.findOne(id);
 	}
+
+
+
+
+
 
 }

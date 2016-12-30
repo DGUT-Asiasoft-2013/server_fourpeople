@@ -1,6 +1,8 @@
 package com.cloudage.membercenter.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.cloudage.membercenter.util.DateRecord;
 
@@ -15,6 +17,14 @@ public class Resume extends DateRecord{
 	String phone;
 	String area;
 	String avater;
+	
+//	User author;
+//	
+//	@ManyToOne
+//	public User getAuthor(){
+//		return author;
+//	}
+	
 	public String getName() {
 		return name;
 	}

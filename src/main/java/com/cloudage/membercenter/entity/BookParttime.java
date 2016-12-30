@@ -9,17 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-
-import com.cloudage.membercenter.util.DateRecord;
-
 @Entity
-public class Joins {
+public class BookParttime {
 	@Embeddable
-	public static class Key implements Serializable
+	public static class Book implements Serializable
 	{
 		User user;
-        Jobs jobs;
-    	@ManyToOne(optional=false)
+		Resume resume;
+		@ManyToOne(optional=false)
 		public User getUser() {
 			return user;
 		}
@@ -27,21 +24,21 @@ public class Joins {
 			this.user = user;
 		}
 		@ManyToOne(optional=false)
-		public Jobs getJobs() {
-			return jobs;
+		public Resume getResume() {
+			return resume;
 		}
-		public void setJobs(Jobs jobs) {
-			this.jobs = jobs;
+		public void setResume(Resume resume) {
+			this.resume = resume;
 		}
 		
 	}
-	Key id;
+	Book id;
 	Date createDate;
 	@EmbeddedId
-	public Key getId() {
+	public Book getId() {
 		return id;
 	}
-	public void setId(Key id) {
+	public void setId(Book id) {
 		this.id = id;
 	}
 	public Date getCreateDate() {
@@ -59,7 +56,6 @@ public class Joins {
 	void onPrePersist()
 	{
 		createDate=new Date();
-		
 				
 	}
 

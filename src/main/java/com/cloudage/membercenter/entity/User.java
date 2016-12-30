@@ -1,7 +1,10 @@
 package com.cloudage.membercenter.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import com.cloudage.membercenter.util.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,11 +21,19 @@ public class User extends BaseEntity {
 	String tel;
 	String avatar;
 	String balance;  //余额
+	
+//	List<Resume> resumes;
+//	@OneToMany
+//	public List<Resume> resumes(){
+//		return resumes;
+//	}
+	
 	@Column(nullable = false)
 	public String getBalance() {
 		return balance;
 	}
 
+	
 	public void setBalance(String balance) {
 		this.balance = balance;
 	}
