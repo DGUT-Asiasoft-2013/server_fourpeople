@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudage.membercenter.entity.Car;
 import com.cloudage.membercenter.entity.Goods;
 import com.cloudage.membercenter.entity.Mall;
 import com.cloudage.membercenter.entity.User;
+import com.cloudage.membercenter.service.ICarService;
 import com.cloudage.membercenter.service.IGoodsService;
 import com.cloudage.membercenter.service.IMallService;
 import com.cloudage.membercenter.service.IUserService;
@@ -32,6 +34,8 @@ public class MallController {
 	IUserService iUserService;
 	@Autowired
 	IGoodsService iGoodsService;
+	@Autowired
+	ICarService iCarService;
 
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
 	public @ResponseBody String hello() {
@@ -183,5 +187,22 @@ public class MallController {
 		return getGoodsByMall(id, 0);
 	}
 	
+	@RequestMapping(value = "/shop/goods/addCart", method = RequestMethod.POST)
+	public Boolean buildCar(
+			@RequestParam String goodsId,
+			HttpServletRequest httpServletRequest) {
+		Integer currentGoodsId = Integer.valueOf(goodsId);
+		Goods goods = iGoodsService.findGoodsById(currentGoodsId);
+		User currnetUser = getCurrentUser(httpServletRequest);
+		Car car = new Car();
+		car.setGoods(goods);
+		car.setCustomerId(currnetUser.getId());
+		if(!iCarService.check(currnetUser.getId(),currentGoodsId)){
+			iCarService.save(car);
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
 	
