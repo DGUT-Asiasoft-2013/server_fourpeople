@@ -1,6 +1,7 @@
 package com.cloudage.membercenter.controller;
 
 import java.io.File;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -196,6 +197,7 @@ public class MallController {
 		User currnetUser = getCurrentUser(httpServletRequest);
 		Car car = new Car();
 		car.setGoods(goods);
+		car.setChoice(false);
 		car.setCustomerId(currnetUser.getId());
 		if(!iCarService.check(currnetUser.getId(),currentGoodsId)){
 			iCarService.save(car);
@@ -204,5 +206,20 @@ public class MallController {
 			return false;
 		}
 	}
+	@RequestMapping("/shop/goods/getCart")
+	public List<Car> getCart(
+			HttpServletRequest httpServletRequest){
+		User currentUser=getCurrentUser(httpServletRequest);
+		List<Car> car=iCarService.findCarByUserId(currentUser.getId());
+	    return car;
+	}
+	
+	@RequestMapping(value = "/shop/goods/deleteCart", method = RequestMethod.POST)
+	public Boolean deleteCar(
+			@RequestParam String carId) {
+		Integer cartId = Integer.valueOf(carId);
+		return iCarService.deleteCarById(cartId);
+	}
+	
 }
 	
