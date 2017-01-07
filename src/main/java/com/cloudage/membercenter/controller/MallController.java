@@ -20,10 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudage.membercenter.entity.Car;
 import com.cloudage.membercenter.entity.Goods;
 import com.cloudage.membercenter.entity.Mall;
+import com.cloudage.membercenter.entity.MyOrder;
 import com.cloudage.membercenter.entity.User;
 import com.cloudage.membercenter.service.ICarService;
 import com.cloudage.membercenter.service.IGoodsService;
 import com.cloudage.membercenter.service.IMallService;
+import com.cloudage.membercenter.service.IMyOrderService;
 import com.cloudage.membercenter.service.IUserService;
 
 @RestController
@@ -37,6 +39,8 @@ public class MallController {
 	IGoodsService iGoodsService;
 	@Autowired
 	ICarService iCarService;
+	@Autowired
+	IMyOrderService iOrderService;
 
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
 	public @ResponseBody String hello() {
@@ -236,6 +240,91 @@ public class MallController {
 		return iUserService.save(user);
 	}
 	
+	@RequestMapping(value = "/shop/goods/addOrder", method = RequestMethod.POST)
+	public int buildOrderr(
+			@RequestParam String carId, 
+			@RequestParam String money,
+			@RequestParam String goodsBuyNumber,
+			@RequestParam String goodsId, 
+			HttpServletRequest httpServletRequest) {
 
+		Integer currentGoodsId = Integer.valueOf(goodsId);
+		Goods orderGoods = iGoodsService.findGoodsById(currentGoodsId);
+		Goods mallGoods = iGoodsService.findGoodsById(currentGoodsId);
+
+		User currnetUser = getCurrentUser(httpServletRequest);
+		// 验证数量
+		if (Integer.valueOf(mallGoods.getGoodsNumber()).intValue() >= Integer.valueOf(goodsBuyNumber).intValue()) {
+			orderGoods.setGoodsNumber(goodsBuyNumber);
+			MyOrder order = new MyOrder();
+			order.setGoods(orderGoods);
+			order.setMoney(money);
+			order.setUser(currnetUser);
+			order.setOrderState(1);
+			order.setCommentState(false);
+			order.setOver(false);
+			order.setBuyNumber(Integer.valueOf(goodsBuyNumber).intValue());
+			// 验证余额
+			if (Double.valueOf(currnetUser.getBalance()) - Double.valueOf(money) >= 0) {
+				// 修改余额
+				currnetUser
+						.setBalance(String.valueOf(Double.valueOf(currnetUser.getBalance()) 
+								- Double.valueOf(money)));
+				// 修改商店商品数量
+				mallGoods.setGoodsNumber(
+						String.valueOf(
+						Integer.valueOf(mallGoods.getGoodsNumber()).intValue()
+						- Integer.valueOf(goodsBuyNumber).intValue()));
+				if (carId.equals("0")) {
+					if (iUserService.save(currnetUser) != null 
+							&& iOrderService.save(order) != null
+							&& iGoodsService.save(mallGoods) != null) {
+						return 3;// 返回3表示成功
+
+					} else {
+						return 2;// 返回2表示保存余额出错或者删除购物车出错或者保存订单出错
+					}
+				} else {
+					Integer currentcarId = Integer.valueOf(carId);
+					if (iUserService.save(currnetUser) != null 
+							&& iOrderService.save(order) != null
+							&& iCarService.deleteCarById(currentcarId)
+							&& iGoodsService.save(mallGoods) != null) {
+						return 3;// 返回3表示成功
+
+					} else {
+						return 2;// 返回2表示保存余额出错或者保存订单出错
+					}
+				}
+
+			} else {
+				return 1;// 返回1表示余额不足
+			}
+		} else {
+			return 0;// 返回0表示该商品数量不够
+		}
+		
+	}
+	
+	@RequestMapping(value = "/getGoods", method = RequestMethod.POST)
+	public Goods getGoodsById(
+			@RequestParam String goodId) {
+		Integer currentGoodsId=Integer.valueOf(goodId);
+		return iGoodsService.findGoodsById(currentGoodsId);
+	}
+	
+	@RequestMapping("/getCustomerOrder")
+	public List<MyOrder> getCustomerOrder(
+			HttpServletRequest httpServletRequest){
+		User currentUser=getCurrentUser(httpServletRequest);
+		return iOrderService.findAllCustomerOrderById(currentUser.getId());
+	}
+	
+	@RequestMapping("/getShopOrder")
+	public List<MyOrder> getShopOrder(
+			HttpServletRequest httpServletRequest){
+		User currentUser=getCurrentUser(httpServletRequest);
+		return iOrderService.findAllShopOrderById(currentUser.getId());
+	}
 }
 	

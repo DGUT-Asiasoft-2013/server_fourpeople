@@ -69,7 +69,6 @@ public class User extends BaseEntity {
 	}
 
 	@Column(nullable = false)
-	@JsonIgnore
 	public String getPasswordHash() {
 		return passwordHash;
 	}
