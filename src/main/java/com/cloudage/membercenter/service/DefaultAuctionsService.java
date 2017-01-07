@@ -3,6 +3,7 @@ package com.cloudage.membercenter.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
@@ -18,13 +19,23 @@ import com.cloudage.membercenter.repository.IAuctionRepository;
 public class DefaultAuctionsService implements IAuctionsService {
 
 	@Autowired
-	IAuctionRepository  auctionRepository;
+	IAuctionRepository auctionRepository;
 
 	@Override
 	public Page<Auction> getAuctions(int page) {
 		// TODO Auto-generated method stub
 		Sort sort = new Sort(Direction.DESC, "createDate");
 		PageRequest request = new PageRequest(0, 50, sort);
+		return auctionRepository.findAllVaildAuction(request);
+		// return auctionRepository.findAll(request);
+	}
+
+	@Override
+	public Page<Auction> getAllAuctions(int page) {
+		// TODO Auto-generated method stub
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		PageRequest request = new PageRequest(0, 50, sort);
+		// return auctionRepository.findAllVaildAuction(request);
 		return auctionRepository.findAll(request);
 	}
 
@@ -33,8 +44,20 @@ public class DefaultAuctionsService implements IAuctionsService {
 		// TODO Auto-generated method stub
 		return auctionRepository.save(auction);
 	}
-	
-	
-	
-	
+
+	@Override
+	public Auction findAuction(int id) {
+		// TODO Auto-generated method stub
+		return auctionRepository.findAuction(id);
+	}
+
+	@Override
+	public Page<Auction> getMyAction(int auctionnerId, int page) {
+
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		PageRequest request = new PageRequest(0, 50, sort);
+		// return auctionRepository.findAllVaildAuction(request);
+		return auctionRepository.findMyAuctionById(auctionnerId,request);
+	}
+
 }

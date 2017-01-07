@@ -19,6 +19,25 @@ public class Mall extends BaseEntity {
 	User user;
 	Date createDate;
 	Date editDate;
+	String shopAbout;
+	int shopLiked;
+
+	public String getShopAbout() {
+		return shopAbout;
+	}
+
+	public void setShopAbout(String shopAbout) {
+		this.shopAbout = shopAbout;
+	}
+
+	public int getShopLiked() {
+		return shopLiked;
+	}
+
+	public void setShopLiked(int shopLiked) {
+		this.shopLiked = shopLiked;
+	}
+
 	@Column(updatable = false)
 	public Date getCreateDate() {
 		return createDate;
@@ -63,7 +82,7 @@ public class Mall extends BaseEntity {
 		this.shopAvatar = shopAvatar;
 	}
 
-	@OneToOne(optional=false)
+	@OneToOne(optional = false)
 	public User getUser() {
 		return user;
 	}
@@ -71,6 +90,7 @@ public class Mall extends BaseEntity {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	@PreUpdate
 	void onPreUpdate() {
 		editDate = new Date();
@@ -79,8 +99,7 @@ public class Mall extends BaseEntity {
 	@PrePersist
 	void onPrePersist() {
 		createDate = new Date();
-		editDate=new Date();
+		editDate = new Date();
 	}
-
 
 }

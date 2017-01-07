@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudage.membercenter.entity.InterviewRequest;
 import com.cloudage.membercenter.entity.Jobs;
 import com.cloudage.membercenter.entity.Joins;
 import com.cloudage.membercenter.entity.Resume;
 import com.cloudage.membercenter.entity.User;
 import com.cloudage.membercenter.service.IBookPartTime;
+import com.cloudage.membercenter.service.IEngageService;
+import com.cloudage.membercenter.service.IIterviewRequestService;
 import com.cloudage.membercenter.service.IJobsService;
 import com.cloudage.membercenter.service.IJoinsService;
 import com.cloudage.membercenter.service.IResumeService;
@@ -41,6 +44,10 @@ public class PartTimeController {
 	IJoinsService joinsService;
 	@Autowired
 	IBookPartTime bookService;
+	@Autowired
+	IIterviewRequestService interviewService;
+	@Autowired
+	IEngageService engageService;
 
 	// 获得当前用户
 	private User getCurrentUser(HttpServletRequest httpServletRequest) {
@@ -213,6 +220,97 @@ public class PartTimeController {
 		{
 			return joinsService.getResumeByJobsId(jobs_id, page);
 		}
+		@RequestMapping("/myResume")
+		public Resume findResumeByAuthorAccount(HttpServletRequest request)
+		{
+			User me=getCurrentUser(request);
+			return resumeService.findResumeByAuthorAccount(me.getStudentId());
+		}
+		@RequestMapping(value="/MyApplicationRecord/{page}")
+		public Page<Jobs> getJobs(String account,@PathVariable int page)
+		{
+			return joinsService.findMyApplicationRecord(account, page);
+		}
+		@RequestMapping("/MyApplicationRecord")
+		public Page<Jobs>getMyApplicationRecord(HttpServletRequest request)
+		{
+			User me=getCurrentUser(request);
+			return getJobs(me.getStudentId(),0);
+		}
+		//Interview
+		@RequestMapping(value = "/interview", method = RequestMethod.POST)
+		public InterviewRequest addInterview(@RequestParam String time, @RequestParam String area, @RequestParam String phone,
+				@RequestParam String interviewer, @RequestParam String remark,
+				 HttpServletRequest request) {
+
+			User currentUser = getCurrentUser(request);
+			String studentId = currentUser.getStudentId();
+			String authorAvater = currentUser.getAvatar();
+
+			InterviewRequest interview = new InterviewRequest();
+			interview.setTime(time);
+			interview.setArea(area);
+			interview.setPhone(phone);
+			interview.setRemark(remark);
+			interview.setInterviewer(interviewer);
+			interview.setAuthorAvater(authorAvater);
+			interview.setEmployer(studentId);
+			return interviewService.save(interview);
+
+		}
+		@RequestMapping(value="/interview/request/{page}")
+		public Page<InterviewRequest> getInterview(String account,@PathVariable int page)
+		{
+			return interviewService.findInterviewByAuthorAccount(account, page);
+		}
+		@RequestMapping("/interview/request")
+		public Page<InterviewRequest>getInterviewRequest(HttpServletRequest request)
+		{
+			User me=getCurrentUser(request);
+			return getInterview(me.getStudentId(),0);
+		}
+		
+		@RequestMapping(value="/engage/{jobsID}",method = RequestMethod.POST) 
+		public int changeEngage( 
+		@PathVariable int jobsID,
+	    @RequestParam String studentId,
+		@RequestParam boolean likes, 
+		HttpServletRequest request 
+		){  
+		
+		  Jobs jobs = jobsService.findOne(jobsID);
+		  User user=userService.findByStudentId(studentId);
+			if(likes) 
+				engageService.addEngage(user, jobs);
+			else 
+				engageService.removeLike(user, jobs);
+			return engageService.countLikes(studentId); 
+			
+			} 
+		@RequestMapping("/checkEngage/{jobsID}")
+		public boolean checkEngage(
+				@PathVariable int jobsID,
+			    @RequestParam String studentId)
+		{
+			
+			return engageService.checkLiked(studentId, jobsID);
+			
+		}
+		@RequestMapping("/countEngage") 
+		public int countEngage(@RequestParam String studentId){ 
+	 		return engageService.countLikes(studentId);
+	 		} 
+		@RequestMapping("/checkEmploy/{jobsID}")
+		public boolean checkEmploy(
+				@PathVariable int jobsID,
+				HttpServletRequest request)
+		{
+			User me=getCurrentUser(request);
+			
+			return engageService.checkLiked(me.getStudentId(), jobsID);
+			
+		}
+
 	
 
 }

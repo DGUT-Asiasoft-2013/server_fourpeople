@@ -61,5 +61,11 @@ public class DefaultIJobsService implements IJobsService {
 		return jobsRepo.findJobsByAuthorAccount(account,pageable);
 	}
 
+	@Override
+	public Jobs findOneByAccount(String account) {
+		// TODO Auto-generated method stub
+		return jobsRepo.findOneByAccount(account);
+	}
+
 	
 }

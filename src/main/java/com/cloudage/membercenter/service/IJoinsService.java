@@ -13,6 +13,7 @@ public interface IJoinsService {
 	 boolean checkLiked(String userId, int jobsId);
 	 Page<Resume> getResume(int userId, int page);
 	 Page<Resume>getResumeByJobsId(int jobsId,int page);
+	 Page<Jobs>findMyApplicationRecord(String account,int page);
 
 	
 

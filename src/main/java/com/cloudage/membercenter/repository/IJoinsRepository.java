@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import com.cloudage.membercenter.entity.Jobs;
 import com.cloudage.membercenter.entity.Joins;
 import com.cloudage.membercenter.entity.Resume;
 
@@ -18,5 +19,7 @@ public interface IJoinsRepository extends PagingAndSortingRepository<Joins,Joins
 	@Query("select resume from Joins joins,Resume resume where joins.id.jobs.id=?1 and resume.account = joins.id.user.studentId")
 	Page<Resume>findAllOfResume(int jobsId,Pageable page);
 	//@Query("From joins joins where joins.id.jobs.id=?1")
+	@Query("select joins.id.jobs from Joins joins where joins.id.user.studentId=?1")
+	Page<Jobs>findMyApplicationRecord(String account,Pageable page);
 
 }

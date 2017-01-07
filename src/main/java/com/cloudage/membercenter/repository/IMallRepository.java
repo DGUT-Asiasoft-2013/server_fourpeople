@@ -11,6 +11,6 @@ public interface IMallRepository extends PagingAndSortingRepository<Mall, Intege
 	@Query("from Mall mall where mall.user = ?1")
 	Mall ishaveshop(User user);
     @Query("from Mall mall where mall.user.id=?1")
-	Mall getMall(Integer userid);
+	Mall findMallByUserId(Integer userid);
 
 }

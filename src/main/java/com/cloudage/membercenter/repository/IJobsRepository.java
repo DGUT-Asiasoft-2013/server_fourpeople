@@ -20,5 +20,7 @@ public interface IJobsRepository extends PagingAndSortingRepository<Jobs,Integer
 	List<Jobs>findAllByAuthorAccount(String studentId);
 	@Query("From Jobs jobs where jobs.account=?1")
 	Page<Jobs>findJobsByAuthorAccount(String account,Pageable page);
+	@Query("From Jobs jobs where jobs.account=?1")
+	Jobs findOneByAccount(String account);
 	
 }
