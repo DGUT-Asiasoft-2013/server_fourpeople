@@ -34,4 +34,10 @@ public class DefaultMyOrderService implements IMyOrderService {
 		// TODO Auto-generated method stub
 		return orderRepo.findAllShopOrderById(currentUserId);
 	}
+
+	@Override
+	public MyOrder findOrderById(Integer id) {
+		// TODO Auto-generated method stub
+		return orderRepo.findOne(id);
+	}
 }

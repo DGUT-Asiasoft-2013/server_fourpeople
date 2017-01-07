@@ -326,5 +326,38 @@ public class MallController {
 		User currentUser=getCurrentUser(httpServletRequest);
 		return iOrderService.findAllShopOrderById(currentUser.getId());
 	}
+	
+	@RequestMapping(value = "/updateOrder", method = RequestMethod.POST)
+	public List<MyOrder> updateOrder(
+			@RequestParam String who,
+			@RequestParam String overId,
+			@RequestParam String over,
+			@RequestParam String commentState,
+			@RequestParam String orderState,
+			HttpServletRequest httpServletRequest) {
+		Integer id=Integer.valueOf(overId);
+		MyOrder myOrder=iOrderService.findOrderById(id);
+		if(myOrder.getOrderState()==2
+				&&Integer.valueOf(orderState).intValue()==3
+				&&!Boolean.valueOf(commentState)){
+			User user=iUserService.findById(myOrder.getGoods().getMall().getUser().getId());
+			String balance=user.getBalance();
+			int money=Integer.valueOf(balance).intValue()+Integer.valueOf(myOrder.getMoney()).intValue();
+			user.setBalance(String.valueOf(money));
+			iUserService.save(user);
+		}
+		
+		myOrder.setOver(Boolean.valueOf(over));
+		myOrder.setCommentState(Boolean.valueOf(commentState));
+		myOrder.setOrderState(Integer.valueOf(orderState).intValue());
+		iOrderService.save(myOrder);
+		if(who.equals("shop")){
+			return getShopOrder(httpServletRequest);
+		}else if(who.equals("customer")){
+			return getCustomerOrder(httpServletRequest);
+		}else{
+			return null;
+		}
+	}
 }
 	
