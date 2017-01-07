@@ -10,6 +10,25 @@ public class Bid extends DateRecord {
 	User Bider;
 	Auction auction;
 	String price;
+	String count;
+	public Boolean getMethodIsPrice() {
+		return methodIsPrice;
+	}
+
+	public void setMethodIsPrice(Boolean methodIsPrice) {
+		this.methodIsPrice = methodIsPrice;
+	}
+
+	Boolean methodIsPrice;
+	
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
+
 	@ManyToOne(optional = false)
 	public User getBider() {
 		return Bider;

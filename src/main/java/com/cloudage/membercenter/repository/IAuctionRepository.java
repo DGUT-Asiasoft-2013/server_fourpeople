@@ -16,8 +16,8 @@ public interface IAuctionRepository extends PagingAndSortingRepository<Auction, 
 	@Query("from Auction auction where auction.id = ?1")
 	Auction findAuction(int id);
 	
-	@Query("from Auction auction where auction.auctinner.id = ?1")
-	Page<Auction> findMyAuctionById(int auctionnerId,Pageable page);
+	@Query("from Auction auction where auction.auctinner.id = ?1 and auction.stateInfo !=?2")
+	Page<Auction> findMyAuctionById(int auctionnerId,String stateInfo,Pageable page);
 
 
 }

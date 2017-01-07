@@ -24,6 +24,25 @@ public class Auction extends BaseEntity {
 	String others;
 	String days;
 	Boolean isAuctioning;
+	String stateInfo;
+
+	public String getStateInfo() {
+		return stateInfo;
+	}
+
+	public void setStateInfo(String stateInfo) {
+		this.stateInfo = stateInfo;
+	}
+
+	public String getBidPrice() {
+		return bidPrice;
+	}
+
+	public void setBidPrice(String bidPrice) {
+		this.bidPrice = bidPrice;
+	}
+
+	String bidPrice;
 
 	public String getDays() {
 		return days;
@@ -124,7 +143,7 @@ public class Auction extends BaseEntity {
 	void onPrePersist() {
 		createDate = new Date();
 		editDate = new Date();
-		isAuctioning=true;
+		isAuctioning = true;
 	}
 
 }
