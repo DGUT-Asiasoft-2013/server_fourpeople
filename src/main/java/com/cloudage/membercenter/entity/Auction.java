@@ -43,7 +43,6 @@ public class Auction extends BaseEntity {
 	}
 
 	String bidPrice;
-
 	public String getDays() {
 		return days;
 	}
@@ -144,6 +143,7 @@ public class Auction extends BaseEntity {
 		createDate = new Date();
 		editDate = new Date();
 		isAuctioning = true;
+
 	}
 
 }

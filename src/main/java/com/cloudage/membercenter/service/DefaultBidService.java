@@ -49,4 +49,5 @@ public class DefaultBidService implements IBidService {
 		return bidRepository.findOne(id);
 	}
 
+
 }

@@ -18,7 +18,16 @@ public class Jobs extends DateRecord{
 	String time;
 	String account;
 	String name;
+	String authorAvater;
+	int id;
+
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getKind() {
 		return kind;
 	}
@@ -73,5 +82,13 @@ public class Jobs extends DateRecord{
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getAuthorAvater() {
+		return authorAvater;
+	}
+	public void setAuthorAvater(String authorAvater) {
+		this.authorAvater = authorAvater;
+	}
+	
+	
 	
 }

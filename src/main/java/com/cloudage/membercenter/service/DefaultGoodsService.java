@@ -28,11 +28,32 @@ public class DefaultGoodsService implements IGoodsService {
 	}
 
 	@Override
-	public Page<Goods> getGoods(Integer userid,int page) {
+	public Page<Goods> getGoods(Integer userid, int page) {
 		// TODO Auto-generated method stub
 		Sort sort = new Sort(Direction.DESC, "createDate");
 		PageRequest pageRequest = new PageRequest(page, 5, sort);
-		return goodsRepo.findAllByUserId(userid,pageRequest);
+		return goodsRepo.findAllByUserId(userid, pageRequest);
+	}
+
+	@Override
+	public boolean delete(Integer goodsId) {
+		// TODO Auto-generated method stub
+		goodsRepo.delete(goodsId);
+		return true;
+	}
+
+	@Override
+	public Goods findGoodsById(Integer goodsId) {
+		// TODO Auto-generated method stub
+		return goodsRepo.findOne(goodsId);
+	}
+
+	@Override
+	public Page<Goods> getGoodsByMall(Integer mallId, int page) {
+		// TODO Auto-generated method stub
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		PageRequest pageRequest = new PageRequest(page, 5, sort);
+		return goodsRepo.getGoodsByMall(mallId, pageRequest);
 	}
 
 }

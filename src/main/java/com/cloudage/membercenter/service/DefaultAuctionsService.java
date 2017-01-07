@@ -58,6 +58,7 @@ public class DefaultAuctionsService implements IAuctionsService {
 		PageRequest request = new PageRequest(0, 50, sort);
 		// return auctionRepository.findAllVaildAuction(request);
 		return auctionRepository.findMyAuctionById(auctionnerId,"完成交易",request);
+
 	}
 
 }

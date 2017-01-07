@@ -14,38 +14,58 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cloudage.membercenter.entity.Jobs;
 import com.cloudage.membercenter.entity.User;
 import com.cloudage.membercenter.repository.IJobsRepository;
+
 @Component
 @Service
 @Transactional
-public class DefaultIJobsService implements IJobsService{
+public class DefaultIJobsService implements IJobsService {
 	@Autowired
-    IJobsRepository jobsRepo;
+	IJobsRepository jobsRepo;
+
 	@Override
 	public Jobs save(Jobs jobs) {
 		// TODO Auto-generated method stub
 		return jobsRepo.save(jobs);
 	}
+
 	@Override
 	public List<Jobs> findAllByAuthor(User user) {
 		// TODO Auto-generated method stub
 		return (List<Jobs>) jobsRepo.findAllByAuthor(user);
 	}
+
 	@Override
 	public List<Jobs> findAllByAuthorAccount(String studentId) {
 		// TODO Auto-generated method stub
 		return jobsRepo.findAllByAuthorAccount(studentId);
 	}
+
 	@Override
 	public Page<Jobs> getJobs(int page) {
 		// TODO Auto-generated method stub
-		Sort sort=new Sort(Direction.DESC,"createDate");
-		PageRequest pageRequest=new PageRequest(page, 10,sort);
+		Sort sort = new Sort(Direction.DESC, "createDate");
+		PageRequest pageRequest = new PageRequest(page, 10, sort);
 		return jobsRepo.findAll(pageRequest);
 	}
+
 	@Override
-	public Jobs findOne(String job_account) {
+	public Jobs findOne(int jobs_id) {
 		// TODO Auto-generated method stub
-		return jobsRepo.findOne(job_account);
+		return jobsRepo.findOne(jobs_id);
 	}
 
+	@Override
+	public Page<Jobs> findJobsByAuthorAccount(int page, String account) {
+		// ÷Ñ”ÑìΩ®“ªÇÄpageable
+		PageRequest pageable = new PageRequest(page, 10);		
+		return jobsRepo.findJobsByAuthorAccount(account,pageable);
+	}
+
+	@Override
+	public Jobs findOneByAccount(String account) {
+		// TODO Auto-generated method stub
+		return jobsRepo.findOneByAccount(account);
+	}
+
+	
 }

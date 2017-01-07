@@ -20,4 +20,5 @@ public interface IAuctionRepository extends PagingAndSortingRepository<Auction, 
 	Page<Auction> findMyAuctionById(int auctionnerId,String stateInfo,Pageable page);
 
 
+
 }

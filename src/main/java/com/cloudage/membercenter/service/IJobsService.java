@@ -12,6 +12,8 @@ public interface IJobsService {
 	List<Jobs>findAllByAuthor(User uer);
 	List<Jobs>findAllByAuthorAccount(String studentId);
 	Page<Jobs>getJobs(int page);
-	Jobs findOne(String job_account);
+	Jobs findOne(int id);
+	Page<Jobs>findJobsByAuthorAccount(int page ,String account);
+	Jobs findOneByAccount(String account);
 
 }

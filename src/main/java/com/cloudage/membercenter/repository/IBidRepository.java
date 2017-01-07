@@ -16,5 +16,4 @@ public interface IBidRepository extends PagingAndSortingRepository<Bid, Integer>
 	
 	@Query("from Bid bid where bid.auction.id=?1 and bid.methodIsPrice=?2")
 	List<Bid> findBidByAuctionId(int auctionnerId,Boolean isPrice);
-
 }

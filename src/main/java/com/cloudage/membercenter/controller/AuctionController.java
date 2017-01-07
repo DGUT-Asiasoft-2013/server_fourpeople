@@ -24,7 +24,6 @@ import com.cloudage.membercenter.service.IAuctionsService;
 import com.cloudage.membercenter.service.IBidService;
 import com.cloudage.membercenter.service.ITransationService;
 import com.cloudage.membercenter.service.IUserService;
-import com.mysql.jdbc.log.Log;
 
 @RestController
 @RequestMapping("/auction")
@@ -38,6 +37,7 @@ public class AuctionController {
 	IBidService iBidSevice;
 	@Autowired
 	ITransationService iTransactionService;
+
 
 	@RequestMapping(value = "/addAuction", method = RequestMethod.POST)
 	public Auction addAuction(@RequestParam String itemName, @RequestParam String price, @RequestParam String method,
@@ -67,6 +67,7 @@ public class AuctionController {
 
 	}
 
+
 	/** 当前登录用户信息 **/
 	@RequestMapping(value = "/me", method = RequestMethod.GET)
 	public User getCurrentUser(HttpServletRequest request) {
@@ -81,7 +82,9 @@ public class AuctionController {
 
 	}
 
+
 	/** 获取所有拍卖物品 */
+
 	@RequestMapping(value = "/auctions/{page}")
 	public Page<Auction> getAuctions(@PathVariable int page) {
 		return iAuctionsService.getAuctions(page);
@@ -96,6 +99,7 @@ public class AuctionController {
 	@RequestMapping(value = "/auction/check")
 	public void autoCheck() {
 		Page<Auction> auctions = iAuctionsService.getAllAuctions(0);
+
 		long s2 = System.currentTimeMillis();// 得到当前的毫秒
 		for (Auction auction : auctions) {
 			// 将字符串转为日期
@@ -107,6 +111,7 @@ public class AuctionController {
 				if (auction.getIsAuctioning() && day > days) {
 					auction.setIsAuctioning(false);
 					auction.setStateInfo("拍卖过期");
+
 					iAuctionsService.save(auction);
 				}
 			}

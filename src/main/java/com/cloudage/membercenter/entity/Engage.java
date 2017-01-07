@@ -7,25 +7,24 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 
-import com.cloudage.membercenter.util.DateRecord;
 
 @Entity
-public class Joins {
+public class Engage {
 	@Embeddable
 	public static class Key implements Serializable
 	{
 		User user;
-        Jobs jobs;
-    	@ManyToOne(optional=false)
+		Jobs jobs;
+		
+		@ManyToOne(optional=false)
 		public User getUser() {
 			return user;
 		}
 		public void setUser(User user) {
 			this.user = user;
 		}
+	
 		@ManyToOne(optional=false)
 		public Jobs getJobs() {
 			return jobs;
@@ -33,10 +32,9 @@ public class Joins {
 		public void setJobs(Jobs jobs) {
 			this.jobs = jobs;
 		}
-		
 	}
 	Key id;
-	Date createDate;
+	Date creataDate;
 	@EmbeddedId
 	public Key getId() {
 		return id;
@@ -44,22 +42,14 @@ public class Joins {
 	public void setId(Key id) {
 		this.id = id;
 	}
-	public Date getCreateDate() {
-		return createDate;
+	public Date getCreataDate() {
+		return creataDate;
 	}
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setCreataDate(Date creataDate) {
+		this.creataDate = creataDate;
 	}
-	@PreUpdate
-	void onPreUpdate()
-	{
-		createDate=new Date();
-	}
-	@PrePersist
-	void onPrePersist()
-	{
-		createDate=new Date();
-				
-	}
+	
+
+	
 
 }

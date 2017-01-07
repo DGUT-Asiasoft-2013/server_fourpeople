@@ -13,5 +13,5 @@ public interface IBidService {
 	Bid findByAuctionId(int auctionId);
 	List<Bid> findBidByAuctionId(int auctionId);
 
-	
+
 }

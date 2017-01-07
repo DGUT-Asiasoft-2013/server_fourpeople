@@ -24,6 +24,15 @@ public class Goods extends BaseEntity {
 	Mall mall;
 	Date createDate;
 	Date editDate;
+	int goodsLiked;
+	public int getGoodsLiked() {
+		return goodsLiked;
+	}
+
+	public void setGoodsLiked(int goodsLiked) {
+		this.goodsLiked = goodsLiked;
+	}
+
 	@Column(updatable = false)
 	public Date getCreateDate() {
 		return createDate;

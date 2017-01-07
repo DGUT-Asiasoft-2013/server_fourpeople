@@ -13,4 +13,6 @@ import com.cloudage.membercenter.entity.Goods;
 public interface IGoodsRepository extends PagingAndSortingRepository<Goods, Integer>{
 	@Query("from Goods goods where goods.mall.user.id = ?1")
 	Page<Goods> findAllByUserId(Integer userid,  Pageable page);
+	@Query("from Goods goods where goods.mall.id = ?1")
+	Page<Goods> getGoodsByMall(Integer mallId, Pageable page);
 }
