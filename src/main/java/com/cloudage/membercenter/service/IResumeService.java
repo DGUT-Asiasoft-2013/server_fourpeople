@@ -14,5 +14,6 @@ public interface IResumeService {
 	List<Resume>findAllByAuthorAccount(String studentId);
 	Page<Resume>getResume(int page);
 	Resume findOne(int id);
+	Resume findResumeByAuthorAccount(String account);
 
 }

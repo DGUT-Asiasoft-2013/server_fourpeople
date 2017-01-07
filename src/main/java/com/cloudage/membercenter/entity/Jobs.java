@@ -19,8 +19,15 @@ public class Jobs extends DateRecord{
 	String account;
 	String name;
 	String authorAvater;
+	int id;
 
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getKind() {
 		return kind;
 	}

@@ -56,6 +56,12 @@ public class DefaultResumeService implements IResumeService{
 		return resumeRepo.findOne(id);
 	}
 
+	@Override
+	public Resume findResumeByAuthorAccount(String account) {
+		// TODO Auto-generated method stub
+		return resumeRepo.findResumeByAuthorAccount(account);
+	}
+
 
 
 

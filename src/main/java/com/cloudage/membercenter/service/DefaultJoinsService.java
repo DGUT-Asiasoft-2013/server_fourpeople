@@ -70,6 +70,12 @@ public class DefaultJoinsService implements IJoinsService{
 		return joinRepo.findAllOfResume(jobsId, pageable);
 	}
 
+	@Override
+	public Page<Jobs> findMyApplicationRecord(String account, int page) {
+		PageRequest pageable = new PageRequest(page, 10);	
+		return joinRepo.findMyApplicationRecord(account, pageable);
+	}
+
 
 
 	
