@@ -1,6 +1,7 @@
 package com.cloudage.membercenter.controller;
 
 import java.io.File;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -42,7 +43,9 @@ public class MallController {
 		return "HELLO WORLD Mall !";
 	}
 //获得当前用户
-	private User getCurrentUser(HttpServletRequest httpServletRequest) {
+	@RequestMapping("/getCurrentUser")
+	private User getCurrentUser(
+			HttpServletRequest httpServletRequest) {
 		HttpSession httpSession = httpServletRequest.getSession(true);
 		Integer id = (Integer) httpSession.getAttribute("id");
 		return iUserService.findById(id);
@@ -190,12 +193,15 @@ public class MallController {
 	@RequestMapping(value = "/shop/goods/addCart", method = RequestMethod.POST)
 	public Boolean buildCar(
 			@RequestParam String goodsId,
+			@RequestParam String buyNumber,
 			HttpServletRequest httpServletRequest) {
 		Integer currentGoodsId = Integer.valueOf(goodsId);
 		Goods goods = iGoodsService.findGoodsById(currentGoodsId);
 		User currnetUser = getCurrentUser(httpServletRequest);
 		Car car = new Car();
 		car.setGoods(goods);
+		car.setBuyNumber(Integer.valueOf(buyNumber).intValue());
+		car.setChoice(false);
 		car.setCustomerId(currnetUser.getId());
 		if(!iCarService.check(currnetUser.getId(),currentGoodsId)){
 			iCarService.save(car);
@@ -204,5 +210,32 @@ public class MallController {
 			return false;
 		}
 	}
+	@RequestMapping("/shop/goods/getCart")
+	public List<Car> getCart(
+			HttpServletRequest httpServletRequest){
+		User currentUser=getCurrentUser(httpServletRequest);
+		List<Car> car=iCarService.findCarByUserId(currentUser.getId());
+	    return car;
+	}
+	
+	@RequestMapping(value = "/shop/goods/deleteCart", method = RequestMethod.POST)
+	public Boolean deleteCar(
+			@RequestParam String carId) {
+		Integer cartId = Integer.valueOf(carId);
+		return iCarService.deleteCarById(cartId);
+	}
+	
+	@RequestMapping(value = "/alterAddress", method = RequestMethod.POST)
+	public User alterAddress(
+			@RequestParam String address,
+			@RequestParam String tel,
+			HttpServletRequest request) {
+		User user = getCurrentUser(request);
+		user.setAddress(address);
+		user.setTel(tel);
+		return iUserService.save(user);
+	}
+	
+
 }
 	

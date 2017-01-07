@@ -18,6 +18,25 @@ public class Car extends BaseEntity {
 	Date createDate;
 	Date editDate;
 	Integer customerId;
+	Boolean choice;
+	int buyNumber;
+
+
+	public int getBuyNumber() {
+		return buyNumber;
+	}
+
+	public void setBuyNumber(int buyNumber) {
+		this.buyNumber = buyNumber;
+	}
+
+	public Boolean getChoice() {
+		return choice;
+	}
+
+	public void setChoice(Boolean choice) {
+		this.choice = choice;
+	}
 
 	@ManyToOne(optional = false)
 	public Goods getGoods() {
