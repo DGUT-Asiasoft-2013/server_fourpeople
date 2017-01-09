@@ -19,10 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudage.membercenter.entity.Car;
 import com.cloudage.membercenter.entity.Goods;
+import com.cloudage.membercenter.entity.GoodsComment;
 import com.cloudage.membercenter.entity.Mall;
 import com.cloudage.membercenter.entity.MyOrder;
 import com.cloudage.membercenter.entity.User;
 import com.cloudage.membercenter.service.ICarService;
+import com.cloudage.membercenter.service.IGoodsCommentService;
 import com.cloudage.membercenter.service.IGoodsService;
 import com.cloudage.membercenter.service.IMallService;
 import com.cloudage.membercenter.service.IMyOrderService;
@@ -41,6 +43,8 @@ public class MallController {
 	ICarService iCarService;
 	@Autowired
 	IMyOrderService iOrderService;
+	@Autowired
+	IGoodsCommentService iCommentService;
 
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
 	public @ResponseBody String hello() {
@@ -342,7 +346,9 @@ public class MallController {
 				&&!Boolean.valueOf(commentState)){
 			User user=iUserService.findById(myOrder.getGoods().getMall().getUser().getId());
 			String balance=user.getBalance();
-			int money=Integer.valueOf(balance).intValue()+Integer.valueOf(myOrder.getMoney()).intValue();
+			double money=Double.valueOf(balance)+Double.valueOf(myOrder.getMoney());
+			System.out.println(money+"1");
+			System.out.println(Double.valueOf(balance)+"1");
 			user.setBalance(String.valueOf(money));
 			iUserService.save(user);
 		}
@@ -358,6 +364,58 @@ public class MallController {
 		}else{
 			return null;
 		}
+	}
+	
+	@RequestMapping(value = "/pushComment", method = RequestMethod.POST)
+	public GoodsComment push(
+			@RequestParam String text,
+			@RequestParam String orderId,
+			HttpServletRequest httpServletRequest) {
+		Integer currentOrderId=Integer.valueOf(orderId);
+		User currentUser=getCurrentUser(httpServletRequest);
+		MyOrder currentOrder=iOrderService.findOrderById(currentOrderId);
+		currentOrder.setCommentState(true);
+		iOrderService.save(currentOrder);
+		GoodsComment comment=new GoodsComment();
+		comment.setGoods(currentOrder.getGoods());
+		comment.setText(text);
+		comment.setUser(currentUser);
+		comment.setMyOrderDate(currentOrder.getCreateDate());
+		return iCommentService.save(comment);
+	}
+	
+	@RequestMapping(value = "/getGoodsComment", method = RequestMethod.POST)
+	public List<GoodsComment> getGoodsComment(
+			@RequestParam String goodId) {
+		Integer currentGoodsId=Integer.valueOf(goodId);
+		return iCommentService.findGoodsCommentByGoodsId(currentGoodsId);
+	}
+	
+	@RequestMapping(value = "/cancelOrder", method = RequestMethod.POST)
+	public MyOrder cancelOrder(
+			@RequestParam String orderId,
+			HttpServletRequest httpServletRequest) {
+		Integer currentOrderId=Integer.valueOf(orderId);
+        MyOrder currentOrder=iOrderService.findOrderById(currentOrderId);
+        currentOrder.setOver(true);
+        Goods goods=iGoodsService.findGoodsById(currentOrder.getGoods().getId());
+        goods.setGoodsNumber(String.valueOf(
+        		Integer.valueOf(goods.getGoodsNumber())
+        		+Integer.valueOf(currentOrder.getBuyNumber())));
+        iGoodsService.save(goods);
+        User user=getCurrentUser(httpServletRequest);
+        user.setBalance(String.valueOf(
+        		Double.valueOf(user.getBalance())
+        		+Double.valueOf(currentOrder.getMoney())));
+        iUserService.save(user);
+        return iOrderService.save(currentOrder);
+	}
+	
+	@RequestMapping(value = "/deleteOrder", method = RequestMethod.POST)
+	public Boolean deleteOrder(
+			@RequestParam String orderId) {
+		Integer currentOrderId=Integer.valueOf(orderId);
+		return iOrderService.deleteOrder(currentOrderId);
 	}
 }
 	

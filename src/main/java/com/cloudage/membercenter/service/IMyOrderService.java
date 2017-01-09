@@ -14,4 +14,6 @@ public interface  IMyOrderService {
 
 	MyOrder findOrderById(Integer id);
 
+	Boolean deleteOrder(Integer currentOrderId);
+
 }

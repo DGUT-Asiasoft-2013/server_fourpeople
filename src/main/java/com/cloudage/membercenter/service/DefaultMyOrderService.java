@@ -40,4 +40,16 @@ public class DefaultMyOrderService implements IMyOrderService {
 		// TODO Auto-generated method stub
 		return orderRepo.findOne(id);
 	}
+
+	@Override
+	public Boolean deleteOrder(Integer currentOrderId) {
+		// TODO Auto-generated method stub
+		try {
+			orderRepo.delete(currentOrderId);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
 }
