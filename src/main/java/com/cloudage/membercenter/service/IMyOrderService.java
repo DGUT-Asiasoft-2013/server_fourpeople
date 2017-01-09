@@ -12,4 +12,6 @@ public interface  IMyOrderService {
 
 	List<MyOrder> findAllShopOrderById(Integer id);
 
+	MyOrder findOrderById(Integer id);
+
 }
