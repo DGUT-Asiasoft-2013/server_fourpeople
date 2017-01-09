@@ -57,7 +57,8 @@ public class DefaultAuctionsService implements IAuctionsService {
 		Sort sort = new Sort(Direction.DESC, "createDate");
 		PageRequest request = new PageRequest(0, 50, sort);
 		// return auctionRepository.findAllVaildAuction(request);
-		return auctionRepository.findMyAuctionById(auctionnerId,request);
+		return auctionRepository.findMyAuctionById(auctionnerId,"完成交易",request);
+
 	}
 
 }

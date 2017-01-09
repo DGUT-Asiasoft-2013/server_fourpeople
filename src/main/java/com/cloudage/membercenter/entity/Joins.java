@@ -59,7 +59,6 @@ public class Joins {
 	void onPrePersist()
 	{
 		createDate=new Date();
-		
 				
 	}
 
