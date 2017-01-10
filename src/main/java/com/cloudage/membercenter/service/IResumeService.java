@@ -15,5 +15,6 @@ public interface IResumeService {
 	Page<Resume>getResume(int page);
 	Resume findOne(int id);
 	Resume findResumeByAuthorAccount(String account);
+	Page<Resume>searchTextWithKeyword(String key,int page);
 
 }
