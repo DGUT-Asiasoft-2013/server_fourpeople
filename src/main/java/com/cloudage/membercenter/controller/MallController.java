@@ -25,7 +25,9 @@ import com.cloudage.membercenter.entity.MyOrder;
 import com.cloudage.membercenter.entity.User;
 import com.cloudage.membercenter.service.ICarService;
 import com.cloudage.membercenter.service.IGoodsCommentService;
+import com.cloudage.membercenter.service.IGoodsLikeService;
 import com.cloudage.membercenter.service.IGoodsService;
+import com.cloudage.membercenter.service.IMallLikeService;
 import com.cloudage.membercenter.service.IMallService;
 import com.cloudage.membercenter.service.IMyOrderService;
 import com.cloudage.membercenter.service.IUserService;
@@ -45,6 +47,10 @@ public class MallController {
 	IMyOrderService iOrderService;
 	@Autowired
 	IGoodsCommentService iCommentService;
+	@Autowired
+	IMallLikeService iMallLikeService;
+	@Autowired
+	IGoodsLikeService iGoodsLikeService;
 
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
 	public @ResponseBody String hello() {
@@ -173,16 +179,19 @@ public class MallController {
 		return iMallService.findMallByUserId(id);
 	}
 	
-	@RequestMapping("/shop/show/{page}")
+	@RequestMapping("/shop/{choice}/show")
 	public Page<Mall> getMall(
-			@PathVariable int page) {
-		return iMallService.getMall(page);
+			@PathVariable int choice) {
+		if(choice==0){
+			return iMallService.getDefaultMall(0);
+		}else if(choice==1){
+			return iMallService.getCreditMall(0);
+		}else{
+			return null;
+		}
+		
 	}
 
-	@RequestMapping("/shop/show")
-	public Page<Mall> getMall() {
-		return getMall(0);
-	}
 	
 	@RequestMapping(value = "/shop/goods/show/{page}", method = RequestMethod.POST)
 	public Page<Goods> getGoodsByMall(
@@ -416,6 +425,90 @@ public class MallController {
 			@RequestParam String orderId) {
 		Integer currentOrderId=Integer.valueOf(orderId);
 		return iOrderService.deleteOrder(currentOrderId);
+	}
+	
+	@RequestMapping("/{mallId}/isliked")
+	public boolean checkLiked(
+			@PathVariable int mallId, 
+			HttpServletRequest request) {
+		User me = getCurrentUser(request);
+		return iMallLikeService.checkLiked(me.getId(), mallId);
+	}
+	
+	@RequestMapping(value = "/{mallId}/likes", method = RequestMethod.POST)
+	public int changeLikes(
+			@PathVariable int mallId, 
+			@RequestParam(name="likes") boolean likes,
+			HttpServletRequest request) {
+		User me = getCurrentUser(request);
+		Mall mall =iMallService.findOne(mallId);
+		if (likes){
+			iMallLikeService.addLike(me, mall);
+			int i=mall.getShopLiked();
+			mall.setShopLiked(i+1);
+			iMallService.save(mall);
+		}else{
+			iMallLikeService.removeLike(me, mall);
+			int i=mall.getShopLiked();
+			mall.setShopLiked(i-1);
+			iMallService.save(mall);
+		}
+		return 0;
+
+	}
+	
+	@RequestMapping("/goods/{goodsId}/isliked")
+	public boolean checkGoodsLiked(
+			@PathVariable int goodsId, 
+			HttpServletRequest request) {
+		User me = getCurrentUser(request);
+		return iGoodsLikeService.checkLiked(me.getId(), goodsId);
+	}
+	
+	@RequestMapping(value = "/goods/{goodsId}/likes", method = RequestMethod.POST)
+	public int changeGoodsLikes(
+			@PathVariable int goodsId, 
+			@RequestParam(name="likes") boolean likes,
+			HttpServletRequest request) {
+		User me = getCurrentUser(request);
+		Goods goods =iGoodsService.findGoodsById(goodsId);
+		if (likes){
+			iGoodsLikeService.addLike(me, goods);
+			int i=goods.getGoodsLiked();
+			goods.setGoodsLiked(i+1);
+			iGoodsService.save(goods);
+		}else{
+			iGoodsLikeService.removeLike(me, goods);
+			int i=goods.getGoodsLiked();
+			goods.setGoodsLiked(i-1);
+			iGoodsService.save(goods);
+		}
+		return 0;
+	}
+	
+	@RequestMapping("/shop/favorite")
+	public List<Mall> getFavoriteMall(
+			HttpServletRequest request) {
+		User me = getCurrentUser(request);
+		return iMallLikeService.getFavorite(me.getId());
+	}
+	@RequestMapping("/goods/favorite")
+	public List<Goods> getFavoriteGoods(
+			HttpServletRequest request) {
+		User me = getCurrentUser(request);
+		return iGoodsLikeService.getFavorite(me.getId());
+	}
+	
+	@RequestMapping(value = "/getSearchShop", method = RequestMethod.POST)
+	public List<Mall> getSearchshop(
+			@RequestParam String edit) {
+		return iMallService.getSearchshop(edit);
+	} 
+	
+	@RequestMapping(value = "/getSearchGoods", method = RequestMethod.POST)
+	public List<Goods> getSearchGoods(
+			@RequestParam String edit) {
+		return iGoodsService.getSearchGoods(edit);
 	}
 }
 	

@@ -1,5 +1,7 @@
 package com.cloudage.membercenter.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -12,5 +14,7 @@ public interface IMallRepository extends PagingAndSortingRepository<Mall, Intege
 	Mall ishaveshop(User user);
     @Query("from Mall mall where mall.user.id=?1")
 	Mall findMallByUserId(Integer userid);
+    @Query("from Mall mall where mall.shopName like %?1% or mall.shopAbout like %?1%" )
+	List<Mall> getSearchshop(String edit);
 
 }

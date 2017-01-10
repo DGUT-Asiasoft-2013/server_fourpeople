@@ -1,5 +1,7 @@
 package com.cloudage.membercenter.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +17,6 @@ public interface IGoodsRepository extends PagingAndSortingRepository<Goods, Inte
 	Page<Goods> findAllByUserId(Integer userid,  Pageable page);
 	@Query("from Goods goods where goods.mall.id = ?1")
 	Page<Goods> getGoodsByMall(Integer mallId, Pageable page);
+	@Query("from Goods goods where goods.goodsName like %?1% or goods.goodsAbout like %?1%")
+	List<Goods> getSearchGoods(String edit);
 }

@@ -28,7 +28,7 @@ public class APIController {
 
 	public @ResponseBody String hello(HttpServletResponse response) {
 		response.setContentType("text/html;charset=UTF-8");
-		return "濂戒箙涓嶈锛屼綘杩樺ソ鍚楋紵";
+		return "好久不见，你还好吗？";
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)

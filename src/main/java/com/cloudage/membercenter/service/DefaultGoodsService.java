@@ -1,5 +1,7 @@
 package com.cloudage.membercenter.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -52,8 +54,14 @@ public class DefaultGoodsService implements IGoodsService {
 	public Page<Goods> getGoodsByMall(Integer mallId, int page) {
 		// TODO Auto-generated method stub
 		Sort sort = new Sort(Direction.DESC, "createDate");
-		PageRequest pageRequest = new PageRequest(page, 5, sort);
+		PageRequest pageRequest = new PageRequest(page, 1000, sort);
 		return goodsRepo.getGoodsByMall(mallId, pageRequest);
+	}
+
+	@Override
+	public List<Goods> getSearchGoods(String edit) {
+		// TODO Auto-generated method stub
+		return goodsRepo.getSearchGoods(edit);
 	}
 
 }
