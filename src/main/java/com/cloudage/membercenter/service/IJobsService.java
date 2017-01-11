@@ -15,5 +15,6 @@ public interface IJobsService {
 	Jobs findOne(int id);
 	Page<Jobs>findJobsByAuthorAccount(int page ,String account);
 	Jobs findOneByAccount(String account);
+	Page<Jobs>searchTextWithKeyword(String key,int page);
 
 }

@@ -67,5 +67,12 @@ public class DefaultIJobsService implements IJobsService {
 		return jobsRepo.findOneByAccount(account);
 	}
 
+	@Override
+	public Page<Jobs> searchTextWithKeyword(String key, int page) {
+		// TODO Auto-generated method stub
+		PageRequest pageable = new PageRequest(page, 10);	
+		return jobsRepo.searchTextWithKeyword(key, pageable);
+	}
+
 	
 }

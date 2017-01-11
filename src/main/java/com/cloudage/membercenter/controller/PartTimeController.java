@@ -310,6 +310,21 @@ public class PartTimeController {
 			return engageService.checkLiked(me.getStudentId(), jobsID);
 			
 		}
+		//搜索功能
+		@RequestMapping("/jobs/s/{keyword}")
+		public Page<Jobs> searhJobsWithKeyword(
+				@PathVariable String keyword,
+				@RequestParam(defaultValue ="0") int page)
+		{
+			return jobsService.searchTextWithKeyword(keyword,page);
+		}
+		//搜索功能
+	   @RequestMapping("/resume/s/{keyword}")
+	   public Page<Resume> searhResumesWithKeyword(
+				@PathVariable String keyword,
+			    @RequestParam(defaultValue ="0") int page){
+					return resumeService.searchTextWithKeyword(keyword, page);
+		}
 
 	
 

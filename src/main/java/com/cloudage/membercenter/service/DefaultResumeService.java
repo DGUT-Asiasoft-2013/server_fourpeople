@@ -62,6 +62,14 @@ public class DefaultResumeService implements IResumeService{
 		return resumeRepo.findResumeByAuthorAccount(account);
 	}
 
+	@Override
+	public Page<Resume> searchTextWithKeyword(String key, int page) {
+		// TODO Auto-generated method stub
+		Sort sort=new Sort(Direction.DESC,"createDate");
+		PageRequest pageRequest=new PageRequest(page, 10,sort);
+		return resumeRepo.searchTextWithKeyword(key, pageRequest);
+	}
+
 
 
 
